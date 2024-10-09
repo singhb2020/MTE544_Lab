@@ -21,8 +21,8 @@ from rclpy.time import Time
 # import ...
 
 
-CIRCLE=0; SPIRAL=1; ACC_LINE=2
-motion_types=['circle', 'spiral', 'line']
+CIRCLE=0; SPIRAL=1; ACC_LINE=2; STOP=3;
+motion_types=['circle', 'spiral', 'line', 'stop']
 
 class motion_executioner(Node):
     
@@ -55,15 +55,15 @@ class motion_executioner(Node):
         #  Part 5: Create below the subscription to the topics corresponding to the respective sensors
         # IMU subscription
         
-        self.imu_subscription = self.create_subscription(Imu, '/imu', self.imu_callback, 10)
+        self.imu_subscription = self.create_subscription(Imu, '/imu', self.imu_callback, qos_profile=qos)
         
         # ENCODER subscription
 
-        self.encoder_subscription = self.create_subscription(Odometry, '/odom', self.odom_callback, 10)
+        self.encoder_subscription = self.create_subscription(Odometry, '/odom', self.odom_callback, qos_profile=qos)
         
         # LaserScan subscription 
         
-        self.laser_subscription = self.create_subscription(LaserScan, '/scan', self.laser_callback, 10)
+        self.laser_subscription = self.create_subscription(LaserScan, '/scan', self.laser_callback, qos_profile=qos)
         
         self.create_timer(0.1, self.timer_callback)
 
@@ -133,7 +133,6 @@ class motion_executioner(Node):
             print("Laser not initialized")
                 
     def timer_callback(self):
-        
         if self.odom_initialized and self.laser_initialized and self.imu_initialized:
             self.successful_init=True
             
@@ -150,6 +149,9 @@ class motion_executioner(Node):
                         
         elif self.type==ACC_LINE:
             cmd_vel_msg=self.make_acc_line_twist()
+
+        elif self.type==STOP:
+            cmd_vel_msg=self.make_stop_twist()
             
         else:
             print("type not set successfully, 0: CIRCLE 1: SPIRAL and 2: ACCELERATED LINE")
@@ -158,6 +160,14 @@ class motion_executioner(Node):
         self.vel_publisher.publish(cmd_vel_msg)
         
     
+    def make_stop_twist(self):
+        msg=Twist()
+
+        msg.linear.x = 0.0
+        msg.linear.y = 0.0
+        msg.angular.z = 0.0
+
+        return msg
     # TODO Part 4: Motion functions: complete the functions to generate the proper messages corresponding to the desired motions of the robot
 
     def make_circular_twist(self):
@@ -165,7 +175,7 @@ class motion_executioner(Node):
         msg=Twist()
         
         msg.linear.x = 0.2
-        msg.angular.z = 0.2
+        msg.angular.z = 0.5
 
         return msg
 
@@ -176,7 +186,7 @@ class motion_executioner(Node):
         msg.angular.z = self.spiral_vel
 
         if self.spiral_vel > 0:
-            self.spiral_vel -= 0.001
+            self.spiral_vel -= 0.002
 
         return msg
     
@@ -195,7 +205,7 @@ if __name__=="__main__":
     argParser=argparse.ArgumentParser(description="input the motion type")
 
 
-    argParser.add_argument("--motion", type=str, default="circle")
+    argParser.add_argument("--motion", type=str, default="stop")
 
 
 
@@ -211,6 +221,9 @@ if __name__=="__main__":
 
     elif args.motion.lower() =="spiral":
         ME=motion_executioner(motion_type=SPIRAL)
+
+    elif args.motion.lower()=="stop":
+        ME=motion_executioner(motion_type=STOP)
 
     else:
         print(f"we don't have {arg.motion.lower()} motion type")
