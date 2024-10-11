@@ -129,6 +129,7 @@ for odom_xy_count, file in enumerate(odom_filenames):
         plt.grid()
         plt.title('Odometry Data (X vs Y) for Line')
         plt.xlabel('X-Position(m)')
+        plt.xlim([0,3])
         plt.ylabel('Y-Position(m)')
     elif odom_xy_count == 1:
         plt.legend()
