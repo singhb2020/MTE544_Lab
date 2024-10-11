@@ -32,8 +32,10 @@ for imu_count, file in enumerate(imu_filenames):
 
     plt.subplot(1,3,1)
 
+    imu_legend_items = ['a_x', 'a_y', 'w_z']
+
     for i in range(0, len(headers) - 1):
-        plt.plot(time_list, [lin[i] for lin in values], label= headers[i]+ " linear")
+        plt.plot(time_list, [lin[i] for lin in values], label= imu_legend_items[i])
         
         
     #plt.plot([lin[0] for lin in values], [lin[1] for lin in values])
@@ -74,8 +76,10 @@ for odom_count, file in enumerate(odom_filenames):
 
     plt.subplot(1,3,2)
 
+    odom_legend_items = ['x', 'y', 'th']
+
     for i in range(0, len(headers) - 1):
-        plt.plot(time_list, [lin[i] for lin in values], label= headers[i]+ " linear")
+        plt.plot(time_list, [lin[i] for lin in values], label= odom_legend_items[i])
         
         
     #plt.plot([lin[0] for lin in values], [lin[1] for lin in values])
@@ -84,19 +88,19 @@ for odom_count, file in enumerate(odom_filenames):
         plt.grid()
         plt.title('Odometry Data for Line')
         plt.xlabel('Time (ns)')
-        plt.ylabel('Meters (m)/Meters (m)/Radians (rad)')
+        plt.ylabel('X-Position(m)/Y-Position(m)/Angle(rad)')
     elif odom_count == 1:
         plt.legend()
         plt.grid()
         plt.title('Odometry Data for Circle')
         plt.xlabel('Time (ns)')
-        plt.ylabel('Meters (m)/Meters (m)/Radians (rad)')
+        plt.ylabel('X-Position(m)/Y-Position(m)/Angle(rad)')
     elif odom_count == 2:
         plt.legend()
         plt.grid()
         plt.title('Odometry Data for Spiral')
         plt.xlabel('Time (ns)')
-        plt.ylabel('Meters (m)/Meters (m)/Radians (rad)')
+        plt.ylabel('X-Position(m)/Y-Position(m)/Angle(rad)')
 
 for odom_xy_count, file in enumerate(odom_filenames):
     # Plot data for line    
@@ -124,20 +128,20 @@ for odom_xy_count, file in enumerate(odom_filenames):
         plt.legend()
         plt.grid()
         plt.title('Odometry Data (X vs Y) for Line')
-        plt.xlabel('Meters (m)')
-        plt.ylabel('Meters (m)')
+        plt.xlabel('X-Position(m)')
+        plt.ylabel('Y-Position(m)')
     elif odom_xy_count == 1:
         plt.legend()
         plt.grid()
         plt.title('Odometry Data (X vs Y) for Circle')
-        plt.xlabel('Meters (m)')
-        plt.ylabel('Meters (m)')
+        plt.xlabel('X-Position(m)')
+        plt.ylabel('Y-Position(m)')
     elif odom_xy_count == 2:
         plt.legend()
         plt.grid()
         plt.title('Odometry Data (X vs Y) for Spiral')
-        plt.xlabel('Meters (m)')
-        plt.ylabel('Meters (m)')
+        plt.xlabel('X-Position(m)')
+        plt.ylabel('Y-Position(m)')
 
 
 plt.figure(line_plot)
