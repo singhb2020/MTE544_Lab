@@ -174,6 +174,7 @@ class motion_executioner(Node):
         
         msg=Twist()
         
+        # Constant linear velocity with constant angular velocity creates a circle
         msg.linear.x = 0.2
         msg.angular.z = 0.5
 
@@ -182,6 +183,8 @@ class motion_executioner(Node):
     def make_spiral_twist(self):
         msg=Twist()
         
+        # Use a constant linear velocity and reduce the angular velocity over time 
+        # to increase the radius of the spiral
         msg.linear.x = 0.2
         msg.angular.z = self.spiral_vel
 
@@ -193,6 +196,7 @@ class motion_executioner(Node):
     def make_acc_line_twist(self):
         msg=Twist()
         
+        # Constant linear velocity results in a line
         msg.linear.x = 0.2
 
         return msg
