@@ -25,6 +25,7 @@ class Logger:
 
             #  Part 5: Write the values from the list to the file
             for value in values_list:
+                # Add the data and delimit it with a comma
                 vals_str += str(value)
                 vals_str += ", "
             
@@ -93,6 +94,7 @@ def euler_from_quaternion(quat):
     z = quat.z
     w = quat.w
 
+    # quaternion conversion formulas
     siny_cosp = 2 * (w * z + x * y)
     cosy_cosp = 1- 2 * (y * y + z * z)
     yaw = atan2(siny_cosp, cosy_cosp)
